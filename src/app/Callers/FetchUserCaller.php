@@ -3,9 +3,9 @@
 namespace App\Callers;
 
 use App\Receivers\FetchUserReceiver;
-use Raid\Caller\Callers\CallerAbstract;
+use Raid\Caller\Callers\GetCaller;
 
-class FetchUserCaller extends CallerAbstract
+class FetchUserCaller extends GetCaller
 {
     public function __construct(
         protected readonly string $id
@@ -16,11 +16,6 @@ class FetchUserCaller extends CallerAbstract
         return new static(
             id: $id
         );
-    }
-
-    public function getMethod(): string
-    {
-        return 'GET';
     }
 
     public function getUrl(): string

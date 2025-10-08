@@ -16,10 +16,8 @@ class UserDto extends DtoAbstract
         protected readonly ?array $address
     ) {}
 
-    public static function fromResponse(Response $response): static
+    public static function fromArray(array $data): static
     {
-        $data = $response->json();
-
         return new static(
             id: Arr::get($data, 'id'),
             name: Arr::get($data, 'name'),
@@ -30,6 +28,11 @@ class UserDto extends DtoAbstract
                 'longitude' => Arr::get($data, 'address.geo.lng'),
             ]
         );
+    }
+
+    public static function fromResponse(Response $response): static
+    {
+        return self::fromArray($response->json());
     }
 
     public function toArray(): array

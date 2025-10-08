@@ -6,10 +6,10 @@ use App\Dtos\UserDto;
 use Illuminate\Http\Client\Response;
 use Raid\Caller\Receivers\ReceiverAbstract;
 
-class FetchUserReceiver extends ReceiverAbstract
+readonly class FetchUserReceiver extends ReceiverAbstract
 {
     public function __construct(
-        protected readonly int $status,
+        protected int $status,
         protected UserDto $user
     ) {}
 
@@ -21,12 +21,32 @@ class FetchUserReceiver extends ReceiverAbstract
         );
     }
 
+    public function toSuccessResponse(): array
+    {
+        return [
+            'message' => 'User fetched successfully',
+            'data' => $this->getUser()->toArray()
+        ];
+    }
+
+    public function toErrorResponse(): array
+    {
+        return [
+            'message' => 'Failed to fetch user'
+        ];
+    }
+
     public function isSuccessResponse(): bool
     {
         return ($this->status >= 200 && $this->status < 300)
             && $this->getUser()->has('id')
             && $this->getUser()->has('username')
             && $this->getUser()->has('companyName');
+    }
+
+    public function getStatus(): int
+    {
+        return $this->status;
     }
 
     public function getUser(): UserDto
