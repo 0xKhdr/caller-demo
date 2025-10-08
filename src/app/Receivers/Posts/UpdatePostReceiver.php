@@ -17,14 +17,14 @@ readonly class UpdatePostReceiver extends ReceiverAbstract
     {
         return new static(
             status: $response->status(),
-            post: PostDto::fromResponse($response)
+            post: PostDto::fromArray($response->json())
         );
     }
 
     public function toSuccessResponse(): array
     {
         return [
-            'message' => 'Post updated successfully',
+            'message' => __('Post updated successfully'),
             'data' => $this->post->toArray(),
         ];
     }
@@ -32,7 +32,7 @@ readonly class UpdatePostReceiver extends ReceiverAbstract
     public function toErrorResponse(): array
     {
         return [
-            'message' => 'Failed to update post',
+            'message' => __('Failed to update post'),
         ];
     }
 }

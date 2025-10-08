@@ -17,14 +17,14 @@ readonly class StorePostReceiver extends ReceiverAbstract
     {
         return new static(
             status: $response->status(),
-            post: PostDto::fromResponse($response)
+            post: PostDto::fromArray($response->json())
         );
     }
 
     public function toSuccessResponse(): array
     {
         return [
-            'message' => 'Post stored successfully',
+            'message' => __('Post stored successfully'),
             'data' => $this->post->toArray(),
         ];
     }
@@ -32,7 +32,7 @@ readonly class StorePostReceiver extends ReceiverAbstract
     public function toErrorResponse(): array
     {
         return [
-            'message' => 'Failed to store post',
+            'message' => __('Failed to store post'),
         ];
     }
 

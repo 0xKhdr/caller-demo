@@ -21,14 +21,14 @@ readonly class DeletePostReceiver extends ReceiverAbstract
     public function toSuccessResponse(): array
     {
         return [
-            'message' => 'Post deleted successfully',
+            'message' => __('Post deleted successfully'),
         ];
     }
 
     public function toErrorResponse(): array
     {
         return [
-            'message' => 'Failed to delete post',
+            'message' => __('Failed to delete post'),
         ];
     }
 }

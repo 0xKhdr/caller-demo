@@ -3,6 +3,7 @@
 namespace App\Callers\Users;
 
 use App\Receivers\Users\GetUsersReceiver;
+use App\Services\AppUtility;
 use Raid\Caller\Callers\GetCaller;
 
 readonly class GetUsersCaller extends GetCaller
@@ -21,7 +22,7 @@ readonly class GetUsersCaller extends GetCaller
 
     public function getUrl(): string
     {
-        return 'https://jsonplaceholder.typicode.com/users';
+        return AppUtility::getJsonPlaceholderUrl('/users');
     }
 
     public function getOptions(): array

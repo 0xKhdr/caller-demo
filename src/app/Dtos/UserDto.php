@@ -2,7 +2,6 @@
 
 namespace App\Dtos;
 
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 use Raid\Caller\Dtos\DtoAbstract;
 
@@ -28,11 +27,6 @@ readonly class UserDto extends DtoAbstract
                 'longitude' => Arr::get($data, 'address.geo.lng'),
             ]
         );
-    }
-
-    public static function fromResponse(Response $response): static
-    {
-        return self::fromArray($response->json());
     }
 
     public function toArray(): array

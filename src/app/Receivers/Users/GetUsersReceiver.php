@@ -15,13 +15,11 @@ readonly class GetUsersReceiver extends ReceiverAbstract
 
     public static function fromResponse(Response $response): static
     {
-        $data = $response->json();
-
         return new static(
             status: $response->status(),
             users: array_map(
-                fn (array $item) => UserDto::fromArray($item),
-                $data
+                fn (array $user) => UserDto::fromArray($user),
+                $response->json()
             )
         );
     }
@@ -29,15 +27,18 @@ readonly class GetUsersReceiver extends ReceiverAbstract
     public function toSuccessResponse(): array
     {
         return [
-            'message' => 'Users fetched successfully',
-            'data' => array_map(fn (UserDto $user) => $user->toArray(), $this->users),
+            'message' => __('Users fetched successfully'),
+            'data' => array_map(
+                fn (UserDto $user) => $user->toArray(),
+                $this->users
+            ),
         ];
     }
 
     public function toErrorResponse(): array
     {
         return [
-            'message' => 'Failed to fetch users',
+            'message' => __('Failed to fetch users'),
         ];
     }
 }

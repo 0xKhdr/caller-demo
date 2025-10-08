@@ -17,14 +17,14 @@ readonly class FindUserReceiver extends ReceiverAbstract
     {
         return new static(
             status: $response->status(),
-            user: UserDto::fromResponse($response)
+            user: UserDto::fromArray($response->json())
         );
     }
 
     public function toSuccessResponse(): array
     {
         return [
-            'message' => 'User fetched successfully',
+            'message' => __('User found successfully'),
             'data' => $this->user->toArray(),
         ];
     }
@@ -32,15 +32,7 @@ readonly class FindUserReceiver extends ReceiverAbstract
     public function toErrorResponse(): array
     {
         return [
-            'message' => 'Failed to fetch user',
+            'message' => __('Failed to find user'),
         ];
-    }
-
-    public function isSuccessResponse(): bool
-    {
-        return parent::isSuccessResponse()
-            && $this->user->has('id')
-            && $this->user->has('username')
-            && $this->user->has('companyName');
     }
 }

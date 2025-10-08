@@ -15,13 +15,11 @@ readonly class GetPostsReceiver extends ReceiverAbstract
 
     public static function fromResponse(Response $response): static
     {
-        $data = $response->json();
-
         return new static(
             status: $response->status(),
             posts: array_map(
-                fn (array $item) => PostDto::fromArray($item),
-                $data
+                fn (array $post) => PostDto::fromArray($post),
+                $response->json()
             )
         );
     }

@@ -2,7 +2,7 @@
 
 namespace App\Receivers\Posts;
 
-use App\Dtos\UserDto;
+use App\Dtos\PostDto;
 use Illuminate\Http\Client\Response;
 use Raid\Caller\Receivers\ReceiverAbstract;
 
@@ -10,34 +10,29 @@ readonly class FindPostReceiver extends ReceiverAbstract
 {
     public function __construct(
         protected int $status,
-        protected array $users
+        protected PostDto $post
     ) {}
 
     public static function fromResponse(Response $response): static
     {
-        $data = $response->json();
-
         return new static(
             status: $response->status(),
-            users: array_map(
-                fn (array $item) => UserDto::fromArray($item),
-                $data
-            )
+            post: PostDto::fromArray($response->json())
         );
     }
 
     public function toSuccessResponse(): array
     {
         return [
-            'message' => 'Users fetched successfully',
-            'data' => array_map(fn (UserDto $user) => $user->toArray(), $this->users),
+            'message' => 'Post found successfully',
+            'data' => $this->post->toArray(),
         ];
     }
 
     public function toErrorResponse(): array
     {
         return [
-            'message' => 'Failed to fetch users',
+            'message' => 'Failed to find post',
         ];
     }
 }

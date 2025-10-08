@@ -2,7 +2,6 @@
 
 namespace App\Dtos;
 
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 use Raid\Caller\Dtos\DtoAbstract;
 
@@ -23,11 +22,6 @@ readonly class PostDto extends DtoAbstract
             title: Arr::get($data, 'title'),
             body: Arr::get($data, 'body'),
         );
-    }
-
-    public static function fromResponse(Response $response): static
-    {
-        return self::fromArray($response->json());
     }
 
     public function toArray(): array

@@ -17,14 +17,14 @@ readonly class PatchPostReceiver extends ReceiverAbstract
     {
         return new static(
             status: $response->status(),
-            post: PostDto::fromResponse($response)
+            post: PostDto::fromArray($response->json())
         );
     }
 
     public function toSuccessResponse(): array
     {
         return [
-            'message' => 'Post patched successfully',
+            'message' => __('Post patched successfully'),
             'data' => $this->post->toArray(),
         ];
     }
@@ -32,7 +32,7 @@ readonly class PatchPostReceiver extends ReceiverAbstract
     public function toErrorResponse(): array
     {
         return [
-            'message' => 'Failed to patch post',
+            'message' => __('Failed to patch post'),
         ];
     }
 }
