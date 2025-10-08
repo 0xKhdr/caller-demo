@@ -13,7 +13,7 @@ class UserDto extends DtoAbstract
         protected readonly ?string $name,
         protected readonly ?string $username,
         protected readonly ?string $companyName,
-        protected readonly ?array $address,
+        protected readonly ?array $address
     ) {}
 
     public static function fromResponse(Response $response): static

@@ -13,7 +13,9 @@ class FetchUserCaller extends CallerAbstract
 
     public static function make(string $id): static
     {
-        return new static($id);
+        return new static(
+            id: $id
+        );
     }
 
     public function getMethod(): string

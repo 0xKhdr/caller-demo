@@ -10,14 +10,14 @@ class FetchUserReceiver extends ReceiverAbstract
 {
     public function __construct(
         protected readonly int $status,
-        protected UserDto $user,
+        protected UserDto $user
     ) {}
 
     public static function fromResponse(Response $response): static
     {
         return new static(
             status: $response->status(),
-            user: UserDto::fromResponse($response),
+            user: UserDto::fromResponse($response)
         );
     }
 
