@@ -4,9 +4,9 @@ namespace App\Receivers\Users;
 
 use App\Dtos\UserDto;
 use Illuminate\Http\Client\Response;
-use Raid\Caller\Receivers\ReceiverAbstract;
+use Raid\Caller\Receivers\ResponseReceiver;
 
-readonly class GetUsersReceiver extends ReceiverAbstract
+readonly class GetUsersReceiver extends ResponseReceiver
 {
     public function __construct(
         protected int $status,

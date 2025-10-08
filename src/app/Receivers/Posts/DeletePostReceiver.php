@@ -3,9 +3,9 @@
 namespace App\Receivers\Posts;
 
 use Illuminate\Http\Client\Response;
-use Raid\Caller\Receivers\ReceiverAbstract;
+use Raid\Caller\Receivers\ResponseReceiver;
 
-readonly class DeletePostReceiver extends ReceiverAbstract
+readonly class DeletePostReceiver extends ResponseReceiver
 {
     public function __construct(
         protected int $status

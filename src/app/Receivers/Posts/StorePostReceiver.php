@@ -4,9 +4,9 @@ namespace App\Receivers\Posts;
 
 use App\Dtos\PostDto;
 use Illuminate\Http\Client\Response;
-use Raid\Caller\Receivers\ReceiverAbstract;
+use Raid\Caller\Receivers\ResponseReceiver;
 
-readonly class StorePostReceiver extends ReceiverAbstract
+readonly class StorePostReceiver extends ResponseReceiver
 {
     public function __construct(
         protected int $status,
