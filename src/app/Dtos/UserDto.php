@@ -4,12 +4,11 @@ namespace App\Dtos;
 
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
-use Raid\Caller\Dtos\ResponseDtoAbstract;
 
-class UserDto extends ResponseDtoAbstract
+class UserDto
 {
     public function __construct(
-        protected readonly ?string $externalId,
+        protected readonly ?string $id,
         protected readonly ?string $name,
         protected readonly ?string $username,
         protected readonly ?string $companyName,
@@ -21,7 +20,7 @@ class UserDto extends ResponseDtoAbstract
         $data = $response->json();
 
         return new static(
-            externalId: Arr::get($data, 'id'),
+            id: Arr::get($data, 'id'),
             name: Arr::get($data, 'name'),
             username: Arr::get($data, 'username'),
             companyName: Arr::get($data, 'company.name'),
@@ -35,7 +34,7 @@ class UserDto extends ResponseDtoAbstract
     public function toArray(): array
     {
         return [
-            'external_id' => $this->externalId,
+            'external_id' => $this->id,
             'name' => $this->name,
             'username' => $this->username,
             'company_name' => $this->companyName,
@@ -45,7 +44,7 @@ class UserDto extends ResponseDtoAbstract
 
     public function getExternalId(): ?string
     {
-        return $this->externalId;
+        return $this->id;
     }
 
     public function getCoordinates(): ?string

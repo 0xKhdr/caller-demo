@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Dtos;
+namespace App\Receivers;
 
+use App\Dtos\UserDto;
 use Illuminate\Http\Client\Response;
-use Raid\Caller\Dtos\ResponseDtoAbstract;
+use Raid\Caller\Receivers\ReceiverAbstract;
 
-class FindUserResponseDto extends ResponseDtoAbstract
+class FetchUserReceiver extends ReceiverAbstract
 {
     public function __construct(
         protected readonly int $status,
@@ -23,7 +24,7 @@ class FindUserResponseDto extends ResponseDtoAbstract
     public function isSuccessResponse(): bool
     {
         return ($this->status >= 200 && $this->status < 300)
-            && $this->getUser()->has('externalId')
+            && $this->getUser()->has('id')
             && $this->getUser()->has('username')
             && $this->getUser()->has('companyName');
     }

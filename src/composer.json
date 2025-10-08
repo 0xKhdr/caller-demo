@@ -9,7 +9,7 @@
         "php": "^8.2",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
-        "raid/caller": "dev-main"
+        "raid/caller": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -83,5 +83,14 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "path",
+            "url": "raid/caller",
+            "options": {
+                "symlink": true
+            }
+        }
+    ]
 }

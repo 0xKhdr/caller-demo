@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Dtos;
+namespace App\Callers;
 
-use Raid\Caller\Dtos\RequestDtoAbstract;
+use App\Receivers\FetchUserReceiver;
+use Raid\Caller\Callers\CallerAbstract;
 
-class FindUserRequestDto extends RequestDtoAbstract
+class FetchUserCaller extends CallerAbstract
 {
     public function __construct(
         protected readonly string $id
@@ -25,8 +26,8 @@ class FindUserRequestDto extends RequestDtoAbstract
         return "https://jsonplaceholder.typicode.com/users/$this->id";
     }
 
-    public function getResponseDto(): string
+    public function getReceiver(): string
     {
-        return FindUserResponseDto::class;
+        return FetchUserReceiver::class;
     }
 }

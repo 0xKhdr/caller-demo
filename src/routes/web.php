@@ -1,8 +1,8 @@
 <?php
 
-use App\Dtos\FindUserRequestDto;
-use App\Dtos\FindUserResponseDto;
+use App\Callers\FetchUserCaller;
 use App\Models\Caller;
+use App\Receivers\FetchUserReceiver;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 
@@ -11,8 +11,8 @@ Route::get('/', function () {
 });
 
 Route::get('/caller/{id}', function (string $userId) {
-    /** @var FindUserResponseDto $response */
-    $response = FindUserRequestDto::make(id: $userId)->call();
+    /** @var FetchUserReceiver $response */
+    $response = FetchUserCaller::make(id: $userId)->call();
     if (! $response->isSuccessResponse()) {
         throw new Exception(sprintf('Error fetching user: %s', $userId));
     }

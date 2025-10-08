@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cf90f0f7ed3fd85afdc71418a5f7837a",
+    "content-hash": "b78f79603ea6e14030fb64cd198f3146",
     "packages": [
         {
             "name": "brick/math",
@@ -3081,16 +3081,10 @@
         {
             "name": "raid/caller",
             "version": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/0xKhdr/caller.git",
-                "reference": "d2c8fbe0f0d95dedb670de492c7d175ca523150c"
-            },
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/0xKhdr/caller/zipball/d2c8fbe0f0d95dedb670de492c7d175ca523150c",
-                "reference": "d2c8fbe0f0d95dedb670de492c7d175ca523150c",
-                "shasum": ""
+                "type": "path",
+                "url": "raid/caller",
+                "reference": "48a842b8e66ea146b88e75ac4e911555de13c9be"
             },
             "require": {
                 "laravel/framework": "^12.0",
@@ -3099,7 +3093,6 @@
             "require-dev": {
                 "laravel/pint": "^1.13"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -3113,7 +3106,6 @@
                     "Raid\\Caller\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -3124,11 +3116,10 @@
                 }
             ],
             "description": "Raid Caller Package",
-            "support": {
-                "issues": "https://github.com/0xKhdr/caller/issues",
-                "source": "https://github.com/0xKhdr/caller/tree/main"
-            },
-            "time": "2025-10-05T02:15:01+00:00"
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "ralouphie/getallheaders",
@@ -8442,9 +8433,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "raid/caller": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
