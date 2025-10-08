@@ -34,6 +34,6 @@ class CallerController extends Controller
     {
         return response()->json([
             'message' => 'Error calling caller!',
-        ], 500);
+        ], 400);
     }
 }
