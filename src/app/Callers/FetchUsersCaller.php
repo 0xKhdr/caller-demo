@@ -5,10 +5,10 @@ namespace App\Callers;
 use App\Receivers\FetchUsersReceiver;
 use Raid\Caller\Callers\GetCaller;
 
-class FetchUsersCaller extends GetCaller
+readonly class FetchUsersCaller extends GetCaller
 {
     public function __construct(
-        protected readonly int $page
+        protected int $page
     ) {}
 
     public static function make(int $page): static
