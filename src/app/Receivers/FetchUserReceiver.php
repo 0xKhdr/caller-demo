@@ -25,14 +25,14 @@ readonly class FetchUserReceiver extends ReceiverAbstract
     {
         return [
             'message' => 'User fetched successfully',
-            'data' => $this->getUser()->toArray()
+            'data' => $this->getUser()->toArray(),
         ];
     }
 
     public function toErrorResponse(): array
     {
         return [
-            'message' => 'Failed to fetch user'
+            'message' => 'Failed to fetch user',
         ];
     }
 

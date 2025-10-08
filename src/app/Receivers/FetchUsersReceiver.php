@@ -20,7 +20,7 @@ readonly class FetchUsersReceiver extends ReceiverAbstract
         return new static(
             status: $response->status(),
             users: array_map(
-                fn(array $item) => UserDto::fromArray($item),
+                fn (array $item) => UserDto::fromArray($item),
                 $data
             )
         );
@@ -28,7 +28,7 @@ readonly class FetchUsersReceiver extends ReceiverAbstract
 
     public function toSuccessResponse(): array
     {
-        return array_map(fn(UserDto $user) => $user->toArray(), $this->users);
+        return array_map(fn (UserDto $user) => $user->toArray(), $this->users);
     }
 
     public function toErrorResponse(): array

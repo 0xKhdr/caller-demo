@@ -2,17 +2,14 @@
 
 namespace App\Callers;
 
-use App\Receivers\FetchUserReceiver;
 use App\Receivers\FetchUsersReceiver;
-use Raid\Caller\Callers\CallerAbstract;
 use Raid\Caller\Callers\GetCaller;
 
 class FetchUsersCaller extends GetCaller
 {
     public function __construct(
         protected readonly int $page
-    ) {
-    }
+    ) {}
 
     public static function make(int $page): static
     {
@@ -23,7 +20,7 @@ class FetchUsersCaller extends GetCaller
 
     public function getUrl(): string
     {
-        return "https://jsonplaceholder.typicode.com/users";
+        return 'https://jsonplaceholder.typicode.com/users';
     }
 
     public function getOptions(): array
