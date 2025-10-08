@@ -4,8 +4,9 @@ namespace App\Dtos;
 
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
+use Raid\Caller\Dtos\DtoAbstract;
 
-class UserDto
+class UserDto extends DtoAbstract
 {
     public function __construct(
         protected readonly ?string $id,
@@ -59,10 +60,5 @@ class UserDto
         }
 
         return $latitude.','.$longitude;
-    }
-
-    public function has(string $key): bool
-    {
-        return isset($this->$key);
     }
 }

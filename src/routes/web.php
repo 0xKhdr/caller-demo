@@ -1,6 +1,7 @@
 <?php
 
 use App\Callers\FetchUserCaller;
+use App\Http\Controllers\CallerController;
 use App\Models\Caller;
 use App\Receivers\FetchUserReceiver;
 use Illuminate\Support\Arr;
@@ -9,6 +10,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/caller', CallerController::class);
 
 Route::get('/caller/{id}', function (string $userId) {
     /** @var FetchUserReceiver $response */
