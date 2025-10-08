@@ -28,7 +28,10 @@ readonly class FetchUsersReceiver extends ReceiverAbstract
 
     public function toSuccessResponse(): array
     {
-        return array_map(fn (UserDto $user) => $user->toArray(), $this->users);
+        return [
+            'message' => 'Users fetched successfully',
+            'data' => array_map(fn (UserDto $user) => $user->toArray(), $this->users),
+        ];
     }
 
     public function toErrorResponse(): array
@@ -36,15 +39,5 @@ readonly class FetchUsersReceiver extends ReceiverAbstract
         return [
             'message' => 'Failed to fetch users',
         ];
-    }
-
-    public function getStatus(): int
-    {
-        return $this->status;
-    }
-
-    public function getUsers(): array
-    {
-        return $this->users;
     }
 }

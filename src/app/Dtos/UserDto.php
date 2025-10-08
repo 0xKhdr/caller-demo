@@ -54,9 +54,9 @@ class UserDto extends DtoAbstract
     public function getCoordinates(): ?string
     {
         if (
-            is_null($this->address) ||
-            is_null($latitude = Arr::get($this->address, 'latitude')) ||
-            is_null($longitude = Arr::get($this->address, 'longitude'))
+            ! $this->address ||
+            ! ($latitude = Arr::get($this->address, 'latitude')) ||
+            ! ($longitude = Arr::get($this->address, 'longitude'))
 
         ) {
             return null;

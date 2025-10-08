@@ -25,7 +25,7 @@ readonly class FetchUserReceiver extends ReceiverAbstract
     {
         return [
             'message' => 'User fetched successfully',
-            'data' => $this->getUser()->toArray(),
+            'data' => $this->user->toArray(),
         ];
     }
 
@@ -38,19 +38,9 @@ readonly class FetchUserReceiver extends ReceiverAbstract
 
     public function isSuccessResponse(): bool
     {
-        return ($this->status >= 200 && $this->status < 300)
-            && $this->getUser()->has('id')
-            && $this->getUser()->has('username')
-            && $this->getUser()->has('companyName');
-    }
-
-    public function getStatus(): int
-    {
-        return $this->status;
-    }
-
-    public function getUser(): UserDto
-    {
-        return $this->user;
+        return parent::isSuccessResponse()
+            && $this->user->has('id')
+            && $this->user->has('username')
+            && $this->user->has('companyName');
     }
 }
