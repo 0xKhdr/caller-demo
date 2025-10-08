@@ -1,0 +1,60 @@
+services:
+    app:
+        container_name: ${DOCKER_PREFIX_NAME}-app
+        build:
+            context: .
+            dockerfile: compose/php/Dockerfile
+            args:
+                - UID=${DOCKER_UID:-1000}
+                - GID=${DOCKER_GID:-1000}
+                - MYSQL_EXT=${DOCKER_MYSQL_EXT:-true}
+                - XDEBUG_EXT=${DOCKER_XDEBUG_EXT:-false}
+        environment:
+          - PHP_IDE_CONFIG=serverName=localhost
+        ports:
+            - "${DOCKER_NGINX_PORT:-80}:80"
+        volumes:
+            - ./src:/var/www/html
+            - ./compose/log/supervisor:/var/log/supervisor
+        networks:
+            - local-network
+        depends_on:
+            - db
+        extra_hosts:
+          - host.docker.internal:host-gateway
+
+    db:
+        container_name: ${DOCKER_PREFIX_NAME}-db
+        image: mysql:8.0.34
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+        ports:
+            - "${DOCKER_MYSQL_PORT:-3306}:3306"
+        volumes:
+            - mysql_data:/var/lib/mysql
+            - ./compose/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+        networks:
+            - local-network
+
+    redis:
+        container_name: ${DOCKER_PREFIX_NAME}-redis
+        image: 'redis:alpine'
+        ports:
+            - "${DOCKER_REDIS_PORT:-6379}:6379"
+        volumes:
+            - redis_data:/data
+        networks:
+            - local-network
+
+volumes:
+    mysql_data:
+        driver: local
+    redis_data:
+        driver: local
+
+networks:
+    local-network:
+        driver: bridge
