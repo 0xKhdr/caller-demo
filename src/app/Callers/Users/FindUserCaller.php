@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Callers;
+namespace App\Callers\Users;
 
-use App\Receivers\FetchUserReceiver;
+use App\Receivers\Users\FindUserReceiver;
 use Raid\Caller\Callers\GetCaller;
 
-readonly class FetchUserCaller extends GetCaller
+readonly class FindUserCaller extends GetCaller
 {
     public function __construct(
-        protected string $id
+        protected int $id
     ) {}
 
-    public static function make(string $id): static
+    public static function make(int $id): static
     {
         return new static(
             id: $id
@@ -25,6 +25,6 @@ readonly class FetchUserCaller extends GetCaller
 
     public function getReceiver(): string
     {
-        return FetchUserReceiver::class;
+        return FindUserReceiver::class;
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Receivers;
+namespace App\Receivers\Users;
 
 use App\Dtos\UserDto;
 use Illuminate\Http\Client\Response;
 use Raid\Caller\Receivers\ReceiverAbstract;
 
-readonly class FetchUserReceiver extends ReceiverAbstract
+readonly class FindUserReceiver extends ReceiverAbstract
 {
     public function __construct(
         protected int $status,

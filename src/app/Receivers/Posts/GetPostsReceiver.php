@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Receivers;
+namespace App\Receivers\Posts;
 
-use App\Dtos\UserDto;
+use App\Dtos\PostDto;
 use Illuminate\Http\Client\Response;
 use Raid\Caller\Receivers\ReceiverAbstract;
 
-readonly class FetchUsersReceiver extends ReceiverAbstract
+readonly class GetPostsReceiver extends ReceiverAbstract
 {
     public function __construct(
         protected int $status,
-        protected array $users
+        protected array $posts
     ) {}
 
     public static function fromResponse(Response $response): static
@@ -19,8 +19,8 @@ readonly class FetchUsersReceiver extends ReceiverAbstract
 
         return new static(
             status: $response->status(),
-            users: array_map(
-                fn (array $item) => UserDto::fromArray($item),
+            posts: array_map(
+                fn (array $item) => PostDto::fromArray($item),
                 $data
             )
         );
@@ -29,15 +29,18 @@ readonly class FetchUsersReceiver extends ReceiverAbstract
     public function toSuccessResponse(): array
     {
         return [
-            'message' => 'Users fetched successfully',
-            'data' => array_map(fn (UserDto $user) => $user->toArray(), $this->users),
+            'message' => __('Posts fetched successfully'),
+            'data' => array_map(
+                fn (PostDto $post) => $post->toArray(),
+                $this->posts
+            ),
         ];
     }
 
     public function toErrorResponse(): array
     {
         return [
-            'message' => 'Failed to fetch users',
+            'message' => __('Failed to fetch posts'),
         ];
     }
 }

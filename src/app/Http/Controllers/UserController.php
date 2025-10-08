@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Callers\FetchUserCaller;
-use App\Callers\FetchUsersCaller;
-use App\Receivers\FetchUsersReceiver;
+use App\Callers\Users\FindUserCaller;
+use App\Callers\Users\GetUsersCaller;
+use App\Receivers\Users\FindUserReceiver;
+use App\Receivers\Users\GetUsersReceiver;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,9 @@ class UserController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        /** @var FetchUsersReceiver $receiver */
-        $receiver = FetchUsersCaller::make(
-            page: $request->query('page', 1)
+        /** @var GetUsersReceiver $receiver */
+        $receiver = GetUsersCaller::make(
+            page: $request->query('page')
         )->call();
 
         return response()->json(
@@ -23,11 +24,11 @@ class UserController extends Controller
         );
     }
 
-    public function find(string $id): JsonResponse
+    public function find(Request $request): JsonResponse
     {
-        /** @var FetchUsersReceiver $receiver */
-        $receiver = FetchUserCaller::make(
-            id: $id
+        /** @var FindUserReceiver $receiver */
+        $receiver = FindUserCaller::make(
+            id: $request->query('id', 1)
         )->call();
 
         return response()->json(

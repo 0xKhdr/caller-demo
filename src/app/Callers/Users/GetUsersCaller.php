@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Callers;
+namespace App\Callers\Users;
 
-use App\Receivers\FetchUsersReceiver;
+use App\Receivers\Users\GetUsersReceiver;
 use Raid\Caller\Callers\GetCaller;
 
-readonly class FetchUsersCaller extends GetCaller
+readonly class GetUsersCaller extends GetCaller
 {
     public function __construct(
-        protected int $page
+        protected ?int $page = 1
     ) {}
 
-    public static function make(int $page): static
-    {
+    public static function make(
+        ?int $page = null
+    ): static {
         return new static(
             page: $page
         );
@@ -34,6 +35,6 @@ readonly class FetchUsersCaller extends GetCaller
 
     public function getReceiver(): string
     {
-        return FetchUsersReceiver::class;
+        return GetUsersReceiver::class;
     }
 }

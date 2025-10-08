@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Receivers;
+namespace App\Receivers\Posts;
 
-use App\Dtos\UserDto;
+use App\Dtos\PostDto;
 use Illuminate\Http\Client\Response;
 use Raid\Caller\Receivers\ReceiverAbstract;
 
@@ -10,37 +10,37 @@ readonly class StorePostReceiver extends ReceiverAbstract
 {
     public function __construct(
         protected int $status,
-        protected UserDto $user
+        protected PostDto $post
     ) {}
 
     public static function fromResponse(Response $response): static
     {
         return new static(
             status: $response->status(),
-            user: UserDto::fromResponse($response)
+            post: PostDto::fromResponse($response)
         );
     }
 
     public function toSuccessResponse(): array
     {
         return [
-            'message' => 'User fetched successfully',
-            'data' => $this->user->toArray(),
+            'message' => 'Post stored successfully',
+            'data' => $this->post->toArray(),
         ];
     }
 
     public function toErrorResponse(): array
     {
         return [
-            'message' => 'Failed to fetch user',
+            'message' => 'Failed to store post',
         ];
     }
 
     public function isSuccessResponse(): bool
     {
         return parent::isSuccessResponse()
-            && $this->user->has('id')
-            && $this->user->has('username')
-            && $this->user->has('companyName');
+            && $this->post->has('id')
+            && $this->post->has('userId')
+            && $this->post->has('title');
     }
 }

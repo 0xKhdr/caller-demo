@@ -6,14 +6,14 @@ use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 use Raid\Caller\Dtos\DtoAbstract;
 
-class UserDto extends DtoAbstract
+readonly class UserDto extends DtoAbstract
 {
     public function __construct(
-        protected readonly ?string $id,
-        protected readonly ?string $name,
-        protected readonly ?string $username,
-        protected readonly ?string $companyName,
-        protected readonly ?array $address
+        protected ?string $id,
+        protected ?string $name,
+        protected ?string $username,
+        protected ?string $companyName,
+        protected ?array $address
     ) {}
 
     public static function fromArray(array $data): static
