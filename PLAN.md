@@ -10,7 +10,7 @@ Enable AI agents to quickly understand `0xKhdr/caller`, navigate the codebase, a
 - **Core roles**
     - **Caller**: defines request (method, URL, options) and designates a **Receiver**.
     - **CallService**: executes HTTP via Laravel Http and dispatches to Receiver.
-    - **Receiver**: transforms `Response` → domain **DTO** and exposes metadata.
+    - **Receiver**: transforms `Response` → domain **DTO**. If extending `ResponseReceiver`, exposes `toResponse()` and `getStatus()`.
     - **DTO**: immutable, typed representation of response data.
 - **Flow**: Controller/service → Caller::call() → CallService → Http → Receiver::fromResponse() → DTO.
 
@@ -39,7 +39,7 @@ Enable AI agents to quickly understand `0xKhdr/caller`, navigate the codebase, a
 ### Concept Model
 
 - Callers encapsulate request intent and options; they do not parse.
-- Receivers own parsing/validation and produce DTOs; they expose status/headers.
+- Receivers own parsing/validation and produce DTOs; with `ResponseReceiver` they expose `toResponse()` and `getStatus()`.
 - DTOs are immutable value objects with `fromArray`, `has`, `get`, `toArray`.
 - CallService centralizes HTTP, logging, retries/middleware via options.
 
@@ -50,7 +50,7 @@ Enable AI agents to quickly understand `0xKhdr/caller`, navigate the codebase, a
 3. `Caller::call()` delegates to `CallService`.
 4. HTTP executes with merged defaults → `Illuminate\Http\Client\Response`.
 5. `Receiver::fromResponse($response)` builds Receiver with DTO + metadata.
-6. Consumer reads `Receiver->getDto()`, `isSuccessful()`, etc.
+6. Consumer uses `Receiver->toResponse()` and `getStatus()` when using `ResponseReceiver`.
 
 ### Conventions
 
@@ -63,13 +63,10 @@ Enable AI agents to quickly understand `0xKhdr/caller`, navigate the codebase, a
 ### Implementing a New Integration (Template)
 
 1. Create DTO in app (or package) that models response JSON.
-2. Create Receiver with `fromResponse(Response)` that returns `static` built with your DTO; set status/headers.
-3. Create Caller (extend `CallerAbstract` or method-specific base). Implement:
-
-    - `getMethod()`, `getUrl()`, `getOptions()` and `getReceiver(): string`.
-
+2. Create Receiver with `fromResponse(Response)` that returns `static` built with your DTO; set status and shape responses if using `ResponseReceiver`.
+3. Create Caller (extend `CallerAbstract` or method-specific base like `GetCaller`, `PostCaller`). Implement `getUrl()`, optionally `getOptions()`, and `getReceiver(): string`.
 4. Use Caller where needed (controller/service) and call `->call()`.
-5. Add tests (Receiver unit test; feature test with `CallerFake`).
+5. Add tests (Receiver unit test using Laravel HTTP fake).
 
 ### Minimal Example Snippets
 
@@ -80,45 +77,39 @@ readonly class UserDto extends DtoAbstract {
         protected int $id,
         protected string $name,
     ) {}
-    public static function fromArray(array $d): static { return new static($d['id'], $d['name']); }
+    public static function fromArray(array $d): static { return new static(id: $d['id'], name: $d['name']); }
 }
 ```
 
 - Receiver skeleton:
 ```php
-readonly class GetUserReceiver extends ReceiverAbstract {
+readonly class FindUserReceiver extends ResponseReceiver {
     public function __construct(
         protected int $status,
-        protected UserDto $userDto
+        protected UserDto $user,
     ) {}
     public static function fromResponse(Response $r): static {
-        return new static($r->status(), UserDto::fromArray($r->json()['user'] ?? []));
+        return new static(status: $r->status(), user: UserDto::fromArray($r->json()));
     }
+    protected function toSuccessResponse(): array { return ['message' => 'User found successfully', 'data' => $this->user->toArray()]; }
+    protected function toErrorResponse(): array { return ['message' => 'Failed to find user']; }
 }
 ```
 
 - Caller skeleton:
 ```php
-class GetUserCaller extends Caller {
-    public function __construct(protected int $userId) {}
-    public function getMethod(): string { return 'GET'; }
-    public function getUrl(): string { return "https://api.example.com/users/{$this->userId}"; }
+readonly class FindUserCaller extends GetCaller {
+    public function __construct(protected int $id) {}
+    public static function make(int $id): static { return new static(id: $id); }
+    public function getUrl(): string { return "https://api.example.com/users/{$this->id}"; }
     public function getOptions(): array { return ['headers' => ['Accept' => 'application/json']]; }
-    public function getReceiver(): string { return GetUserReceiver::class; }
+    public function getReceiver(): string { return FindUserReceiver::class; }
 }
 ```
 
 ### Testing Guidance
 
-- Fake callers:
-```php
-CallerFake::fake([
-  GetUserCaller::class => ['dto' => new UserDto(1, 'John'), 'status' => 200],
-]);
-CallerFake::assertCalled(GetUserCaller::class);
-```
-
-- Receiver unit: construct `Response`, call `fromResponse`, assert DTO fields/status.
+- Use Laravel HTTP fakes to construct `Http::response(...)`, call `Receiver::fromResponse(...)`, and assert `getStatus()` and `toResponse()` payloads.
 
 ### Observability & Config
 
