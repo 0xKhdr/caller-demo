@@ -4,7 +4,7 @@ namespace App\Callers\Posts;
 
 use App\Receivers\Posts\StorePostReceiver;
 use App\Services\AppUtility;
-use Raid\Caller\Callers\PostCaller;
+use Raid\Caller\Callers\Implementations\PostCaller;
 
 readonly class StorePostCaller extends PostCaller
 {

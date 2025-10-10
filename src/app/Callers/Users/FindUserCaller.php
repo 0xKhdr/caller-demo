@@ -4,7 +4,7 @@ namespace App\Callers\Users;
 
 use App\Receivers\Users\FindUserReceiver;
 use App\Services\AppUtility;
-use Raid\Caller\Callers\GetCaller;
+use Raid\Caller\Callers\Implementations\GetCaller;
 
 readonly class FindUserCaller extends GetCaller
 {

@@ -4,7 +4,7 @@ namespace App\Callers\Posts;
 
 use App\Receivers\Posts\UpdatePostReceiver;
 use App\Services\AppUtility;
-use Raid\Caller\Callers\PutCaller;
+use Raid\Caller\Callers\Implementations\PutCaller;
 
 readonly class UpdatePostCaller extends PutCaller
 {

@@ -4,7 +4,7 @@ namespace App\Callers\Posts;
 
 use App\Receivers\Posts\PatchPostReceiver;
 use App\Services\AppUtility;
-use Raid\Caller\Callers\PatchCaller;
+use Raid\Caller\Callers\Implementations\PatchCaller;
 
 readonly class PatchPostCaller extends PatchCaller
 {

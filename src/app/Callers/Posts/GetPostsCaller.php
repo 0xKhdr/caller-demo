@@ -4,7 +4,7 @@ namespace App\Callers\Posts;
 
 use App\Receivers\Posts\GetPostsReceiver;
 use App\Services\AppUtility;
-use Raid\Caller\Callers\GetCaller;
+use Raid\Caller\Callers\Implementations\GetCaller;
 
 readonly class GetPostsCaller extends GetCaller
 {
