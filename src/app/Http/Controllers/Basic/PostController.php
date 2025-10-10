@@ -2,12 +2,6 @@
 
 namespace App\Http\Controllers\Basic;
 
-use App\Callers\Posts\DeletePostCaller;
-use App\Callers\Posts\FindPostCaller;
-use App\Callers\Posts\GetPostsCaller;
-use App\Callers\Posts\PatchPostCaller;
-use App\Callers\Posts\StorePostCaller;
-use App\Callers\Posts\UpdatePostCaller;
 use App\Http\Controllers\Controller;
 use App\Services\AppUtility;
 use Illuminate\Http\JsonResponse;
@@ -22,7 +16,7 @@ class PostController extends Controller
             url: AppUtility::getJsonPlaceholderUrl('/posts'),
             query: array_filter([
                 '_page' => $request->query('page'),
-                'userId' => $request->query('userId')
+                'userId' => $request->query('userId'),
             ])
         );
 
@@ -40,7 +34,7 @@ class PostController extends Controller
     public function find(Request $request): JsonResponse
     {
         $response = Http::get(
-            url: AppUtility::getJsonPlaceholderUrl('/posts/' . $request->query('id', 1)),
+            url: AppUtility::getJsonPlaceholderUrl('/posts/'.$request->query('id', 1)),
         );
 
         return $response->successful()
@@ -61,7 +55,7 @@ class PostController extends Controller
             data: [
                 'userId' => $request->query('userId', 1),
                 'title' => $request->query('title', 'Default title'),
-                'body' => $request->query('body', 'Default body')
+                'body' => $request->query('body', 'Default body'),
             ],
         );
 
@@ -79,11 +73,11 @@ class PostController extends Controller
     public function update(Request $request): JsonResponse
     {
         $response = Http::put(
-            url: AppUtility::getJsonPlaceholderUrl('/posts/' . $request->query('id', 1)),
+            url: AppUtility::getJsonPlaceholderUrl('/posts/'.$request->query('id', 1)),
             data: [
                 'userId' => $request->query('userId', 1),
                 'title' => $request->query('title', 'Updated title'),
-                'body' => $request->query('body', 'Updated body')
+                'body' => $request->query('body', 'Updated body'),
             ]
         );
 
@@ -101,11 +95,11 @@ class PostController extends Controller
     public function patch(Request $request): JsonResponse
     {
         $response = Http::patch(
-            url: AppUtility::getJsonPlaceholderUrl('/posts/' . $request->query('id', 1)),
+            url: AppUtility::getJsonPlaceholderUrl('/posts/'.$request->query('id', 1)),
             data: array_filter([
                 'userId' => $request->query('userId'),
                 'title' => $request->query('title'),
-                'body' => $request->query('body')
+                'body' => $request->query('body'),
             ])
         );
 
@@ -123,7 +117,7 @@ class PostController extends Controller
     public function delete(Request $request): JsonResponse
     {
         $response = Http::delete(
-            url: AppUtility::getJsonPlaceholderUrl('/posts/' . $request->query('id', 1)),
+            url: AppUtility::getJsonPlaceholderUrl('/posts/'.$request->query('id', 1)),
         );
 
         return $response->successful()
