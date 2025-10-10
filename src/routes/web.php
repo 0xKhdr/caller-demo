@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Basic\PostController as BasicPostController;
-use App\Http\Controllers\Caller\PostController as CallerPostController;
 use App\Http\Controllers\Builder\PostController as BuilderPostController;
+use App\Http\Controllers\Caller\PostController as CallerPostController;
 use App\Http\Controllers\Caller\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;

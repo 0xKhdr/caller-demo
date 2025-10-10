@@ -23,15 +23,15 @@ class PostController extends Controller
         $response = RequestBuilder::to(
             url: AppUtility::getJsonPlaceholderUrl('/posts'),
         )
-        ->get()
-        ->withMiddleware([
-            RetryMiddleware::class
-        ])
-        ->withQuery([
-            '_page' => $request->query('page'),
-        ])
-        ->call()
-        ->toDtoCollection(PostDto::class);
+            ->get()
+            ->withMiddleware([
+                RetryMiddleware::class,
+            ])
+            ->withQuery([
+                '_page' => $request->query('page'),
+            ])
+            ->call()
+            ->toDtoCollection(PostDto::class);
 
         dd($response);
     }
