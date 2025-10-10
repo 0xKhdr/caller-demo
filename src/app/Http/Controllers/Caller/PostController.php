@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Caller;
 
 use App\Callers\Posts\DeletePostCaller;
 use App\Callers\Posts\FindPostCaller;
@@ -8,35 +8,18 @@ use App\Callers\Posts\GetPostsCaller;
 use App\Callers\Posts\PatchPostCaller;
 use App\Callers\Posts\StorePostCaller;
 use App\Callers\Posts\UpdatePostCaller;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public function store(Request $request): JsonResponse
-    {
-        $caller = StorePostCaller::make(
-            userId: $request->query('userId', 1),
-            title: $request->query('title', 'Default title'),
-            body: $request->query('body', 'Default body')
-        );
-
-        $receiver = $caller->call();
-
-        return response()->json(
-            data: $receiver->toResponse(),
-            status: $receiver->getStatus()
-        );
-    }
-
     public function index(Request $request): JsonResponse
     {
-        $caller = GetPostsCaller::make(
+        $receiver = GetPostsCaller::make(
             page: $request->query('page'),
             userId: $request->query('userId')
-        );
-
-        $receiver = $caller->call();
+        )->call();
 
         return response()->json(
             data: $receiver->toResponse(),
@@ -46,11 +29,23 @@ class PostController extends Controller
 
     public function find(Request $request): JsonResponse
     {
-        $caller = FindPostCaller::make(
+        $receiver = FindPostCaller::make(
             id: $request->query('id', 1)
-        );
+        )->call();
 
-        $receiver = $caller->call();
+        return response()->json(
+            data: $receiver->toResponse(),
+            status: $receiver->getStatus()
+        );
+    }
+
+    public function store(Request $request): JsonResponse
+    {
+        $receiver = StorePostCaller::make(
+            userId: $request->query('userId', 1),
+            title: $request->query('title', 'Default title'),
+            body: $request->query('body', 'Default body')
+        )->call();
 
         return response()->json(
             data: $receiver->toResponse(),
@@ -60,14 +55,12 @@ class PostController extends Controller
 
     public function update(Request $request): JsonResponse
     {
-        $caller = UpdatePostCaller::make(
+        $receiver = UpdatePostCaller::make(
             id: $request->query('id', 1),
             userId: $request->query('userId', 1),
             title: $request->query('title', 'Updated title'),
             body: $request->query('body', 'Updated body')
-        );
-
-        $receiver = $caller->call();
+        )->call();
 
         return response()->json(
             data: $receiver->toResponse(),
@@ -77,14 +70,12 @@ class PostController extends Controller
 
     public function patch(Request $request): JsonResponse
     {
-        $caller = PatchPostCaller::make(
+        $receiver = PatchPostCaller::make(
             id: $request->query('id', 1),
             userId: $request->query('userId'),
             title: $request->query('title'),
             body: $request->query('body')
-        );
-
-        $receiver = $caller->call();
+        )->call();
 
         return response()->json(
             data: $receiver->toResponse(),
@@ -94,11 +85,9 @@ class PostController extends Controller
 
     public function delete(Request $request): JsonResponse
     {
-        $caller = DeletePostCaller::make(
+        $receiver = DeletePostCaller::make(
             id: $request->query('id', 1)
-        );
-
-        $receiver = $caller->call();
+        )->call();
 
         return response()->json(
             data: $receiver->toResponse(),
