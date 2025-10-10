@@ -25,7 +25,7 @@ Route::get('/caller/{domain}/{action}', function (Request $request, string $doma
     return $controller->{$action}($request);
 })
     ->where('domain', 'users|posts')
-    ->where('action', 'index|find|store|update|patch|delete');
+    ->where('action', 'index|find|store|update|patch|delete|benchmark');
 
 // Basic and Caller routes
 Route::get('/{version}/{action}', function (Request $request, string $version, string $action) {
@@ -42,4 +42,4 @@ Route::get('/{version}/{action}', function (Request $request, string $version, s
     return $controller->{$action}($request);
 })
     ->where('version', 'basic|caller')
-    ->where('action', 'index|find|store|update|patch|delete');
+    ->where('action', 'index|find|store|update|patch|delete|benchmark');

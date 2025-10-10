@@ -11,6 +11,7 @@ use App\Callers\Posts\UpdatePostCaller;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Benchmark;
 
 class PostController extends Controller
 {
@@ -92,6 +93,20 @@ class PostController extends Controller
         return response()->json(
             data: $receiver->toResponse(),
             status: $receiver->getStatus()
+        );
+    }
+
+    public function benchmark(Request $request): JsonResponse
+    {
+        $benchmark = Benchmark::value(function () use ($request) {
+            return GetPostsCaller::make(
+                page: $request->query('page'),
+                userId: $request->query('userId')
+            )->call();
+        });
+
+        return response()->json(
+            data: ['time_ms' => number_format(last($benchmark), 4)]
         );
     }
 }

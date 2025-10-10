@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\AppUtility;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Benchmark;
 use Illuminate\Support\Facades\Http;
 
 class PostController extends Controller
@@ -20,15 +21,14 @@ class PostController extends Controller
             ])
         );
 
-        return $response->successful()
-            ? response()->json(
-                data: $response->json(),
-                status: $response->status()
-            )
-            : response()->json(
-                data: ['error' => 'Failed to fetch posts'],
-                status: $response->status()
-            );
+        $data = $response->successful()
+            ? ['message' => 'Posts fetched successfully', 'data' => $response->json()]
+            : ['error' => 'Failed to fetch posts',  'data' => []];
+
+        return response()->json(
+            data: $data,
+            status: $response->status()
+        );
     }
 
     public function find(Request $request): JsonResponse
@@ -37,15 +37,14 @@ class PostController extends Controller
             url: AppUtility::getJsonPlaceholderUrl('/posts/'.$request->query('id', 1)),
         );
 
-        return $response->successful()
-            ? response()->json(
-                data: $response->json(),
-                status: $response->status()
-            )
-            : response()->json(
-                data: ['error' => 'Post not found'],
-                status: $response->status()
-            );
+        $data = $response->successful()
+            ? ['message' => 'Post fetched successfully', 'data' => $response->json()]
+            : ['error' => 'Post not found'];
+
+        return response()->json(
+            data: $data,
+            status: $response->status()
+        );
     }
 
     public function store(Request $request): JsonResponse
@@ -59,15 +58,14 @@ class PostController extends Controller
             ],
         );
 
-        return $response->successful()
-            ? response()->json(
-                data: $response->json(),
-                status: $response->status()
-            )
-            : response()->json(
-                data: ['error' => 'Failed to create post'],
-                status: $response->status()
-            );
+        $data = $response->successful()
+            ? ['message' => 'Post created successfully', 'data' => $response->json()]
+            : ['error' => 'Failed to create post', 'data' => []];
+
+        return response()->json(
+            data: $data,
+            status: $response->status()
+        );
     }
 
     public function update(Request $request): JsonResponse
@@ -81,15 +79,14 @@ class PostController extends Controller
             ]
         );
 
-        return $response->successful()
-            ? response()->json(
-                data: $response->json(),
-                status: $response->status()
-            )
-            : response()->json(
-                data: ['error' => 'Failed to update post'],
-                status: $response->status()
-            );
+        $data = $response->successful()
+            ? ['message' => 'Post updated successfully', 'data' => $response->json()]
+            : ['error' => 'Failed to update post', 'data' => []];
+
+        return response()->json(
+            data: $data,
+            status: $response->status()
+        );
     }
 
     public function patch(Request $request): JsonResponse
@@ -103,15 +100,14 @@ class PostController extends Controller
             ])
         );
 
-        return $response->successful()
-            ? response()->json(
-                data: $response->json(),
-                status: $response->status()
-            )
-            : response()->json(
-                data: ['error' => 'Failed to patch post'],
-                status: $response->status()
-            );
+        $data = $response->successful()
+            ? ['message' => 'Post patched successfully', 'data' => $response->json()]
+            : ['error' => 'Failed to patch post', 'data' => []];
+
+        return response()->json(
+            data: $data,
+            status: $response->status()
+        );
     }
 
     public function delete(Request $request): JsonResponse
@@ -120,14 +116,34 @@ class PostController extends Controller
             url: AppUtility::getJsonPlaceholderUrl('/posts/'.$request->query('id', 1)),
         );
 
-        return $response->successful()
-            ? response()->json(
-                data: ['message' => 'Post deleted successfully'],
-                status: $response->status()
-            )
-            : response()->json(
-                data: ['error' => 'Failed to delete post'],
-                status: $response->status()
+        $data = $response->successful()
+            ? ['message' => 'Post deleted successfully']
+            : ['error' => 'Failed to delete post'];
+
+        return response()->json(
+            data: $data,
+            status: $response->status()
+        );
+    }
+
+    public function benchmark(Request $request): JsonResponse
+    {
+        $benchmark = Benchmark::value(function () use ($request) {
+            $response = Http::get(
+                url: AppUtility::getJsonPlaceholderUrl('/posts'),
+                query: array_filter([
+                    '_page' => $request->query('page'),
+                    'userId' => $request->query('userId'),
+                ])
             );
+
+            return $response->successful()
+                ? ['message' => 'Posts fetched successfully', 'data' => $response->json()]
+                : ['error' => 'Failed to fetch posts',  'data' => []];
+        });
+
+        return response()->json(
+            data: ['time_ms' => number_format(last($benchmark), 4)]
+        );
     }
 }
