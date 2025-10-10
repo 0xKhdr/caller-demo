@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Basic\PostController as BasicPostController;
 use App\Http\Controllers\Caller\PostController as CallerPostController;
+use App\Http\Controllers\Builder\PostController as BuilderPostController;
 use App\Http\Controllers\Caller\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -10,7 +11,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Caller routes
+// BuilderAbstract routes
 Route::get('/caller/{domain}/{action}', function (Request $request, string $domain, string $action) {
     $controller = match ($domain) {
         'users' => new UserController,
@@ -27,11 +28,12 @@ Route::get('/caller/{domain}/{action}', function (Request $request, string $doma
     ->where('domain', 'users|posts')
     ->where('action', 'index|find|store|update|patch|delete|benchmark');
 
-// Basic and Caller routes
+// Basic and BuilderAbstract routes
 Route::get('/{version}/{action}', function (Request $request, string $version, string $action) {
     $controller = match ($version) {
         'basic' => new BasicPostController,
         'caller' => new CallerPostController,
+        'builder' => new BuilderPostController,
         default => throw new Exception(sprintf('Version %s not found', $version)),
     };
 
@@ -41,5 +43,5 @@ Route::get('/{version}/{action}', function (Request $request, string $version, s
 
     return $controller->{$action}($request);
 })
-    ->where('version', 'basic|caller')
+    ->where('version', 'basic|caller|builder')
     ->where('action', 'index|find|store|update|patch|delete|benchmark');
